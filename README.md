@@ -55,6 +55,7 @@ Set dependencies
 
 ```php
 // config/dependencies.php
+
 return [
     FriendsOfHyperf\SessionHandler\Handler\MemcacheHandler::class => FriendsOfHyperf\SessionHandler\Handler\MemcacheHandlerClusterFactory::class,
 ];
