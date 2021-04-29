@@ -12,6 +12,45 @@ namespace FriendsOfHyperf\SessionHandler;
 
 class PathParser
 {
+    /**
+     * @param array|string $path
+     * @param bool $cluster
+     */
+    public static function parse($path, $cluster = false): array
+    {
+        if ($cluster) {
+            /** @var array $servers [[host,port,weight],[host,port,weight]] or ['tcp://host:port#weight', 'tcp://host:port#weight'] */
+            $servers = [];
+
+            foreach ($path as $server) {
+                if (is_array($server)) {
+                    $server = self::fromArray($server);
+                } elseif (is_string($server)) {
+                    $server = self::fromUrl($server);
+                }
+                $servers[] = $server;
+            }
+        } else {
+            /** @var array|string $path tcp://host:port or [host, port] */
+            if (is_string($path)) {
+                [$host, $port] = self::fromUrl($path);
+            } elseif (is_array($path)) {
+                [$host, $port] = self::fromArray($path);
+            } else {
+                throw new \InvalidArgumentException('Invalid type of \'session.options.path\'');
+            }
+
+            $servers = [
+                [
+                    'host' => $host,
+                    'port' => $port,
+                ],
+            ];
+        }
+
+        return $servers;
+    }
+
     public static function fromUrl(string $path): array
     {
         return [

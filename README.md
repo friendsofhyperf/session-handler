@@ -24,7 +24,7 @@ composer require easyswoole/memcache
 
 ## Configure
 
-- Memcache/Memcached for singleton
+- Singleton
 
 ```php
 // config/session.php
@@ -32,13 +32,13 @@ composer require easyswoole/memcache
 return [
     'handler' => FriendsOfHyperf\SessionHandler\Handler\MemcacheHandler::class,
     // or
-    // 'handler' => FriendsOfHyperf\SessionHandler\Handler\MemcachedHandler::class,
+    'handler' => FriendsOfHyperf\SessionHandler\Handler\MemcachedHandler::class,
     'options' => [
         // tcp://host:port
         'path' => 'tcp://127.0.0.1:11211',
         // or
         // [host, port]
-        // 'path' => ['127.0.0.1', 11211],
+        'path' => ['127.0.0.1', 11211],
         'gc_maxlifetime' => 1200,
         'session_name' => 'HYPERF_SESSION_ID',
         'domain' => null,
@@ -47,14 +47,17 @@ return [
 ];
 ```
 
-- Memcache for cluster
+- Cluster
 
 ```php
 // config/session.php
 
 return [
     'handler' => FriendsOfHyperf\SessionHandler\Handler\MemcacheHandler::class,
+    // or
+    'handler' => FriendsOfHyperf\SessionHandler\Handler\MemcachedHandler::class,
     'options' => [
+        'cluster' => true,
         'path' => [
             // [host, port, weight]
             ['127.0.0.1', 11211, 1],
@@ -62,10 +65,10 @@ return [
         ],
         // or
         // ['tcp://host:port#weight']
-        // 'path' => [
-        //     'tcp://127.0.0.1:11211#1',
-        //     'tcp://127.0.0.1:11212#1',
-        // ],
+        'path' => [
+            'tcp://127.0.0.1:11211#1',
+            'tcp://127.0.0.1:11212#1',
+        ],
         'gc_maxlifetime' => 1200,
         'session_name' => 'HYPERF_SESSION_ID',
         'domain' => null,
@@ -74,17 +77,7 @@ return [
 ];
 ```
 
-Set dependencies
-
-```php
-// config/dependencies.php
-
-return [
-    FriendsOfHyperf\SessionHandler\Handler\MemcacheHandler::class => FriendsOfHyperf\SessionHandler\Handler\MemcacheHandlerClusterFactory::class,
-];
-```
-
 ## Support drivers
 
-- [x] Memcache `singleton`/`cluster`
-- [x] Memcached `singleton`
+- [x] Memcache
+- [x] Memcached
