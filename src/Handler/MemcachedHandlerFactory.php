@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace FriendsOfHyperf\SessionHandler\Handler;
 
 use EasySwoole\Memcache\Config;
+use FriendsOfHyperf\SessionHandler\PathParser;
 use Hyperf\Contract\ConfigInterface;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
@@ -26,9 +27,9 @@ class MemcachedHandlerFactory
         $path = $config->get('session.options.path', 'tcp://127.0.0.1:11211');
 
         if (is_string($path)) {
-            [$host, $port] = [parse_url($path, PHP_URL_HOST) ?: '127.0.0.1', parse_url($path, PHP_URL_PORT) ?: 11211];
+            [$host, $port] = PathParser::fromUrl($path);
         } elseif (is_array($path)) {
-            [$host, $port] = [$path[0] ?? '127.0.0.1', $path[1] ?: 11211];
+            [$host, $port] = PathParser::fromArray($path);
         } else {
             throw new InvalidArgumentException('Invalid type of \'session.options.path\'');
         }

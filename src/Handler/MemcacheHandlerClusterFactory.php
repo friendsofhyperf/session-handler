@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace FriendsOfHyperf\SessionHandler\Handler;
 
+use FriendsOfHyperf\SessionHandler\PathParser;
 use Huizhang\Memcache\Config;
 use Hyperf\Contract\ConfigInterface;
 use Psr\Container\ContainerInterface;
@@ -28,13 +29,9 @@ class MemcacheHandlerClusterFactory
 
         foreach ($path as $server) {
             if (is_array($server)) {
-                $server = [$server[0] ?: '127.0.0.1', $server[1] ?: 11211];
+                $server = PathParser::fromArray($server);
             } elseif (is_string($server)) {
-                $server = [
-                    parse_url($server, PHP_URL_HOST) ?: '127.0.0.1',
-                    parse_url($server, PHP_URL_PORT) ?: 11211,
-                    (int) parse_url($server, PHP_URL_FRAGMENT) ?: 1,
-                ];
+                $server = PathParser::fromUrl($server);
             }
             $servers[] = $server;
         }
