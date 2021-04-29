@@ -21,8 +21,24 @@ class MemcacheHandlerClusterFactory
         /** @var ConfigInterface $config */
         $config = $container->get(ConfigInterface::class);
         $gcMaxLifetime = $config->get('session.options.gc_maxlifetime', 1200);
-        /** @var array $servers [[host,port,weight],[host,port,weight]] */
-        $servers = $config->get('session.options.path', []);
+
+        /** @var array $servers [[host,port,weight],[host,port,weight]] or ['tcp://host:port#weight', 'tcp://host:port#weight'] */
+        $path = $config->get('session.options.path', []);
+        $servers = [];
+
+        foreach ($path as $server) {
+            if (is_array($server)) {
+                $server = [$server[0] ?: '127.0.0.1', $server[1] ?: 11211];
+            } elseif (is_string($server)) {
+                $server = [
+                    parse_url($server, PHP_URL_HOST) ?: '127.0.0.1',
+                    parse_url($server, PHP_URL_PORT) ?: 11211,
+                    (int) parse_url($server, PHP_URL_FRAGMENT) ?: 1,
+                ];
+            }
+            $servers[] = $server;
+        }
+
         $configure = new Config();
         $configure->setServers($servers);
 
