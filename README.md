@@ -10,6 +10,54 @@
 composer require friendsofhyperf/session-handler
 ```
 
+## Configure
+
+- Memcache/Memcached for singleton
+
+```php
+// config/session.php
+
+return [
+    'handler' => Handler\FileHandler::class,
+    'options' => [
+        'path' => 'tcp://127.0.0.1:11211',
+        'gc_maxlifetime' => 1200,
+        'session_name' => 'HYPERF_SESSION_ID',
+        'domain' => null,
+        'cookie_lifetime' => 5 * 60 * 60,
+    ],
+];
+```
+
+- Memcache for cluster
+
+```php
+// config/session.php
+
+return [
+    'handler' => Handler\FileHandler::class,
+    'options' => [
+        'path' => [
+            ['127.0.0.1', 11211, 1],
+            ['127.0.0.1', 11212, 1],
+        ],
+        'gc_maxlifetime' => 1200,
+        'session_name' => 'HYPERF_SESSION_ID',
+        'domain' => null,
+        'cookie_lifetime' => 5 * 60 * 60,
+    ],
+];
+```
+
+Set dependencies
+
+```php
+// config/dependencies.php
+return [
+    FriendsOfHyperf\SessionHandler\Handler\MemcacheHandler::class => FriendsOfHyperf\SessionHandler\Handler\MemcacheHandlerClusterFactory::class,
+];
+```
+
 ## Drivers
 
 - [x] Memcache `singleton`/`cluster`
