@@ -18,7 +18,9 @@ composer require friendsofhyperf/session-handler
 // config/session.php
 
 return [
-    'handler' => Handler\FileHandler::class,
+    'handler' => FriendsOfHyperf\SessionHandler\Handler\MemcacheHandler::class,
+    // or
+    // 'handler' => FriendsOfHyperf\SessionHandler\Handler\MemcachedHandler::class,
     'options' => [
         'path' => 'tcp://127.0.0.1:11211',
         'gc_maxlifetime' => 1200,
@@ -35,7 +37,7 @@ return [
 // config/session.php
 
 return [
-    'handler' => Handler\FileHandler::class,
+    'handler' => FriendsOfHyperf\SessionHandler\Handler\MemcacheHandler::class,
     'options' => [
         'path' => [
             ['127.0.0.1', 11211, 1],
