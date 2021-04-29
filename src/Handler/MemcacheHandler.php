@@ -26,8 +26,11 @@ class MemcacheHandler implements SessionHandlerInterface
      */
     protected $gcMaxLifeTime = 1200;
 
-    public function __construct(Config $config, int $gcMaxLifeTime = 1200)
+    public function __construct(array $servers, int $gcMaxLifeTime = 1200)
     {
+        $config = new Config();
+        $config->setServers($servers);
+
         $this->memcache = new Memcache($config);
         $this->gcMaxLifeTime = $gcMaxLifeTime;
     }

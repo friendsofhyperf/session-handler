@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace FriendsOfHyperf\SessionHandler\Handler;
 
 use FriendsOfHyperf\SessionHandler\PathParser;
-use Huizhang\Memcache\Config;
 use Hyperf\Contract\ConfigInterface;
 use Psr\Container\ContainerInterface;
 
@@ -36,9 +35,6 @@ class MemcacheHandlerClusterFactory
             $servers[] = $server;
         }
 
-        $configure = new Config();
-        $configure->setServers($servers);
-
-        return new MemcacheHandler($configure, $gcMaxLifetime);
+        return new MemcacheHandler($servers, $gcMaxLifetime);
     }
 }

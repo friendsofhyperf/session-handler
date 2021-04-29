@@ -10,14 +10,12 @@ declare(strict_types=1);
  */
 namespace FriendsOfHyperf\SessionHandler\Handler;
 
-use EasySwoole\Memcache\Config;
-use EasySwoole\Memcache\Memcache;
 use SessionHandlerInterface;
 
 class MemcachedHandler implements SessionHandlerInterface
 {
     /**
-     * @var Memcache
+     * @var MemcachedProxy
      */
     protected $memcache;
 
@@ -26,9 +24,9 @@ class MemcachedHandler implements SessionHandlerInterface
      */
     protected $gcMaxLifeTime = 1200;
 
-    public function __construct(Config $config, int $gcMaxLifeTime = 1200)
+    public function __construct(array $servers, int $gcMaxLifeTime = 1200)
     {
-        $this->memcache = new Memcache($config);
+        $this->memcache = new MemcachedProxy($servers);
         $this->gcMaxLifeTime = $gcMaxLifeTime;
     }
 

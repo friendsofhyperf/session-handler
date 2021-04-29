@@ -12,10 +12,9 @@ namespace FriendsOfHyperf\SessionHandler\Handler;
 
 use FriendsOfHyperf\SessionHandler\PathParser;
 use Hyperf\Contract\ConfigInterface;
-use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 
-class MemcacheHandlerFactory
+class MemcachedHandlerClusterFactory
 {
     public function __invoke(ContainerInterface $container)
     {
@@ -25,18 +24,19 @@ class MemcacheHandlerFactory
         /** @var array|string $path tcp://host:port or [host, port] */
         $path = $config->get('session.options.path', 'tcp://127.0.0.1:11211');
 
-        if (is_string($path)) {
-            [$host, $port] = PathParser::fromUrl($path);
-        } elseif (is_array($path)) {
-            [$host, $port] = PathParser::fromArray($path);
-        } else {
-            throw new InvalidArgumentException('Invalid type of \'session.options.path\'');
+        /** @var array $servers [[host,port,weight],[host,port,weight]] or ['tcp://host:port#weight', 'tcp://host:port#weight'] */
+        $path = $config->get('session.options.path', []);
+        $servers = [];
+
+        foreach ($path as $server) {
+            if (is_array($server)) {
+                $server = PathParser::fromArray($server);
+            } elseif (is_string($server)) {
+                $server = PathParser::fromUrl($server);
+            }
+            $servers[] = $server;
         }
 
-        $servers = [
-            [$host, $port],
-        ];
-
-        return new MemcacheHandler($servers, $gcMaxLifetime);
+        return new MemcachedHandler($servers, $gcMaxLifetime);
     }
 }

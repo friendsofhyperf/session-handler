@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace FriendsOfHyperf\SessionHandler\Handler;
 
-use EasySwoole\Memcache\Config;
 use FriendsOfHyperf\SessionHandler\PathParser;
 use Hyperf\Contract\ConfigInterface;
 use InvalidArgumentException;
@@ -34,11 +33,13 @@ class MemcachedHandlerFactory
             throw new InvalidArgumentException('Invalid type of \'session.options.path\'');
         }
 
-        $configure = new Config([
-            'host' => $host,
-            'port' => $port,
-        ]);
+        $servers = [
+            [
+                'host' => $host,
+                'port' => $port,
+            ],
+        ];
 
-        return new MemcachedHandler($configure, $gcMaxLifetime);
+        return new MemcachedHandler($servers, $gcMaxLifetime);
     }
 }
