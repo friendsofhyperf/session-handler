@@ -12,5 +12,5 @@ composer require friendsofhyperf/session-handler
 
 ## Drivers
 
-[x] Memcache `singleton`/`cluster`
-[x] Memcached `singleton`
+- [x] Memcache `singleton`/`cluster`
+- [x] Memcached `singleton`
