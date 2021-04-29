@@ -10,6 +10,18 @@
 composer require friendsofhyperf/session-handler
 ```
 
+- memcache
+
+```bash
+composer require huizhang/memcache
+```
+
+- memcached
+
+```bash
+composer require easyswoole/memcache
+```
+
 ## Configure
 
 - Memcache/Memcached for singleton
