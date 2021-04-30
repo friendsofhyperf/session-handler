@@ -10,14 +10,13 @@ declare(strict_types=1);
  */
 namespace FriendsOfHyperf\SessionHandler\Handler;
 
-use Huizhang\Memcache\Config;
-use Huizhang\Memcache\Memcache;
+use FriendsOfHyperf\SessionHandler\Strategy\StrategyInterface;
 use SessionHandlerInterface;
 
 class MemcacheHandler implements SessionHandlerInterface
 {
     /**
-     * @var Memcache
+     * @var MemcacheProxy
      */
     protected $memcache;
 
@@ -26,12 +25,9 @@ class MemcacheHandler implements SessionHandlerInterface
      */
     protected $gcMaxLifeTime = 1200;
 
-    public function __construct(array $servers, int $gcMaxLifeTime = 1200)
+    public function __construct(StrategyInterface $strategy, int $gcMaxLifeTime = 1200)
     {
-        $config = new Config();
-        $config->setServers($servers);
-
-        $this->memcache = new Memcache($config);
+        $this->memcache = new MemcacheProxy($strategy);
         $this->gcMaxLifeTime = $gcMaxLifeTime;
     }
 

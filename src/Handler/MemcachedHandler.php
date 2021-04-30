@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace FriendsOfHyperf\SessionHandler\Handler;
 
+use FriendsOfHyperf\SessionHandler\Strategy\StrategyInterface;
 use SessionHandlerInterface;
 
 class MemcachedHandler implements SessionHandlerInterface
@@ -24,9 +25,9 @@ class MemcachedHandler implements SessionHandlerInterface
      */
     protected $gcMaxLifeTime = 1200;
 
-    public function __construct(array $servers, int $gcMaxLifeTime = 1200)
+    public function __construct(StrategyInterface $strategy, int $gcMaxLifeTime = 1200)
     {
-        $this->memcache = new MemcachedProxy($servers);
+        $this->memcache = new MemcachedProxy($strategy);
         $this->gcMaxLifeTime = $gcMaxLifeTime;
     }
 

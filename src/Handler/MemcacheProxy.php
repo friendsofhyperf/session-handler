@@ -10,14 +10,14 @@ declare(strict_types=1);
  */
 namespace FriendsOfHyperf\SessionHandler\Handler;
 
-use EasySwoole\Memcache\Config;
-use EasySwoole\Memcache\Memcache;
 use FriendsOfHyperf\SessionHandler\Strategy\StrategyInterface;
+use Huizhang\Memcache\Config;
+use Huizhang\Memcache\Memcache;
 
 /**
- * @mixin \EasySwoole\Memcache\Memcache
+ * @mixin \Huizhang\Memcache\Memcache
  */
-class MemcachedProxy
+class MemcacheProxy
 {
     /**
      * @var Memcache[]
@@ -41,7 +41,9 @@ class MemcachedProxy
         $hash = sprintf('%s:%s', $host, $port);
 
         if (! isset($this->clients[$hash])) {
-            $this->clients[$hash] = new Memcache(new Config(['host' => $host, 'port' => $port]));
+            $config = new Config();
+            $config->setServers([[$host, $port]]);
+            $this->clients[$hash] = new Memcache($config);
         }
 
         return $this->clients[$hash]->{$name}(...$arguments);
