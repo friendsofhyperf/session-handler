@@ -47,7 +47,7 @@ return [
 ];
 ```
 
-- Cluster
+- Cluster `beta`
 
 ```php
 // config/session.php
