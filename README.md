@@ -1,4 +1,4 @@
-# session-handler
+# session-handler `beta`
 
 [![Latest Stable Version](https://poser.pugx.org/friendsofhyperf/session-handler/version.png)](https://packagist.org/packages/friendsofhyperf/session-handler)
 [![Total Downloads](https://poser.pugx.org/friendsofhyperf/session-handler/d/total.png)](https://packagist.org/packages/friendsofhyperf/session-handler)
@@ -47,7 +47,7 @@ return [
 ];
 ```
 
-- Cluster `beta`
+- Cluster
 
 ```php
 // config/session.php
