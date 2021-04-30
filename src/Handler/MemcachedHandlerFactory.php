@@ -26,6 +26,8 @@ class MemcachedHandlerFactory
         $strategyFactory = $container->get(StrategyFactory::class);
         /** @var HashingFactory $hashFactory */
         $hashFactory = $container->get(HashingFactory::class);
+        /** @var PathParser $parser */
+        $parser = $container->get(PathParser::class);
 
         $gcMaxLifetime = $config->get('session.options.gc_maxlifetime', 1200);
         /** @var array|string $path */
@@ -34,7 +36,7 @@ class MemcachedHandlerFactory
         $hashStrategy = (bool) $config->get('session.options.hash_strategy', 'consistent');
         $hashFunction = (bool) $config->get('session.options.hash_function', 'crc32');
         $strategy = $strategyFactory->get($hashStrategy, $hashFactory->get($hashFunction));
-        $servers = PathParser::parse($path, $cluster);
+        $servers = $parser->parse($path, $cluster);
 
         foreach ($servers as [$host, $port, $weight]) {
             $strategy->addServer($host, $port, $weight);
