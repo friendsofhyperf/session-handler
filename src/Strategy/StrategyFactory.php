@@ -14,7 +14,7 @@ use FriendsOfHyperf\SessionHandler\Hashing\HashingInterface;
 
 class StrategyFactory
 {
-    const DEFAULT_STRATEGY = 'consistent';
+    public const DEFAULT_STRATEGY = 'consistent';
 
     public function get($type = self::DEFAULT_STRATEGY, HashingInterface $hasher): StrategyInterface
     {

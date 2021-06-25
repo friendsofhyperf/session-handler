@@ -12,7 +12,7 @@ namespace FriendsOfHyperf\SessionHandler\Hashing;
 
 class HashingFactory
 {
-    const DEFAULT_FUNCTION = 'crc32';
+    public const DEFAULT_FUNCTION = 'crc32';
 
     public function get($function = self::DEFAULT_FUNCTION): HashingInterface
     {
